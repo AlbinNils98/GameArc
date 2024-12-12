@@ -35,15 +35,23 @@ CREATE TABLE IF NOT EXISTS user_game(
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS rating_type(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL UNIQUE
+);
+
 CREATE TABLE IF NOT EXISTS rating (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_game_id INT NOT NULL,
+    rating_type_id INT NOT NULL,
     value INT CHECK (value BETWEEN 1 AND 10) NOT NULL,
-    FOREIGN KEY (user_game_id) REFERENCES user_game(id) ON DELETE CASCADE
+    FOREIGN KEY (user_game_id) REFERENCES user_game(id) ON DELETE CASCADE,
+    FOREIGN KEY (rating_type_id) REFERENCES rating_type(id)
 );
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+TRUNCATE TABLE rating_type;
 TRUNCATE TABLE genre;
 TRUNCATE TABLE game;
 TRUNCATE TABLE user;
