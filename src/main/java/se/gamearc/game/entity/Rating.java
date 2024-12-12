@@ -21,6 +21,11 @@ public class Rating extends BaseEntity {
   private UserGame userGame;
 
   @NotNull
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "rating_type_id", nullable = false)
+  private RatingType ratingType;
+
+  @NotNull
   @Column(name = "value", nullable = false)
   private Integer value;
 
