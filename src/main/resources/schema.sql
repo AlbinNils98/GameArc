@@ -30,33 +30,13 @@ CREATE TABLE IF NOT EXISTS user_game(
     game_id INT NOT NULL,
     user_id INT NOT NULL,
     status_id INT NOT NULL,
+    comment TEXT,
+    story_rating INT CHECK ( story_rating BETWEEN 1 AND 10),
+    graphics_rating INT CHECK ( graphics_rating BETWEEN 1 AND 10),
+    gameplay_rating INT CHECK ( gameplay_rating BETWEEN 1 AND 10),
     FOREIGN KEY (status_id) REFERENCES status(id),
     FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE ,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS rating_type(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL UNIQUE
-);
 
-CREATE TABLE IF NOT EXISTS rating (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_game_id INT NOT NULL,
-    rating_type_id INT NOT NULL,
-    value INT CHECK (value BETWEEN 1 AND 10) NOT NULL,
-    FOREIGN KEY (user_game_id) REFERENCES user_game(id) ON DELETE CASCADE,
-    FOREIGN KEY (rating_type_id) REFERENCES rating_type(id)
-);
-
-SET FOREIGN_KEY_CHECKS = 0;
-
-TRUNCATE TABLE rating_type;
-TRUNCATE TABLE genre;
-TRUNCATE TABLE game;
-TRUNCATE TABLE user;
-TRUNCATE TABLE user_game;
-TRUNCATE TABLE status;
-TRUNCATE TABLE rating;
-
-SET FOREIGN_KEY_CHECKS = 1;

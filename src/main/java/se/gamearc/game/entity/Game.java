@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import se.gamearc.BaseEntity;
+import se.gamearc.userGame.entity.UserGame;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

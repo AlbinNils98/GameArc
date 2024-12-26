@@ -1,7 +1,7 @@
-package se.gamearc.game.repository;
+package se.gamearc.userGame;
 
 import org.springframework.data.repository.ListCrudRepository;
-import se.gamearc.game.entity.UserGame;
+import se.gamearc.userGame.entity.UserGame;
 
 public interface UserGameRepository extends ListCrudRepository <UserGame, Integer>{
 }
