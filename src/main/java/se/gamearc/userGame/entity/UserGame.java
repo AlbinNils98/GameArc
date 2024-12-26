@@ -1,4 +1,4 @@
-package se.gamearc.game.entity;
+package se.gamearc.userGame.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -7,10 +7,8 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import se.gamearc.BaseEntity;
+import se.gamearc.game.entity.Game;
 import se.gamearc.user.entity.User;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -35,7 +33,22 @@ public class UserGame extends BaseEntity {
   @JoinColumn(name = "status_id", nullable = false)
   private Status status;
 
-  @OneToMany(mappedBy = "userGame")
-  private Set<Rating> ratings = new LinkedHashSet<>();
+  @Lob
+  @Column( name = "comment")
+  private String comment;
+
+  @Column(name = "story_rating")
+  private Integer storyRating;
+
+  @Column(name = "graphics_rating")
+  private Integer graphicsRating;
+
+  @Column(name = "gameplay_rating")
+  private Integer gameplayRating;
+
+  private Integer calculateAverageRating() {
+    return (storyRating + graphicsRating + gameplayRating) / 3;
+  }
+
 
 }

@@ -5,9 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.gamearc.game.dto.GameDto;
-import se.gamearc.service.GameService;
+import se.gamearc.game.service.GameService;
 
-import java.util.List;
 import java.util.Set;
 
 @RequestMapping("/api")

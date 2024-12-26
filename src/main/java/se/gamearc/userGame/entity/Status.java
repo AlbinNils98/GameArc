@@ -1,4 +1,4 @@
-package se.gamearc.game.entity;
+package se.gamearc.userGame.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;

@@ -1,7 +1,6 @@
-package se.gamearc.service;
+package se.gamearc.userGame;
 
 import org.springframework.stereotype.Service;
-import se.gamearc.game.repository.UserGameRepository;
 
 @Service
 public class UserGameService {
