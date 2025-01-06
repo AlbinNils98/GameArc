@@ -1,6 +1,7 @@
 package se.gamearc.userGame;
 
 import org.springframework.stereotype.Service;
+import se.gamearc.exception.ResourceNotFoundException;
 import se.gamearc.user.repository.UserRepository;
 
 import java.util.Set;
@@ -18,33 +19,57 @@ public class UserGameService {
   }
 
   public Set<UserGameDto> getAllUserGames(String username) {
-    return userGameRepository.findAll().stream()
+    Set<UserGameDto> games = userGameRepository.findAll().stream()
         .filter(userGame -> userGame.getUser().getUsername().equals(username))
         .map(UserGameDto::from)
         .collect(Collectors.toSet());
+
+    if (games.isEmpty()) {
+      throw new ResourceNotFoundException("No games found");
+    }
+
+    return checkIfEmpty(games);
   }
 
   public Set<UserGameDto> getUserGamesByTitle(String username, String gameTitle) {
-    return userGameRepository.findAll().stream()
+    Set<UserGameDto> games = userGameRepository.findAll().stream()
         .filter(userGame -> userGame.getUser().getUsername().equals(username))
         .filter(userGame -> userGame.getGame().getTitle().toLowerCase().contains(gameTitle.toLowerCase()))
         .map(UserGameDto::from)
         .collect(Collectors.toSet());
+
+    if (games.isEmpty()) {
+      throw new ResourceNotFoundException("No games found");
+    }
+
+    return checkIfEmpty(games);
   }
 
   public Set<UserGameDto> getUserGamesByGenre(String username, String genre) {
-    return userGameRepository.findAll().stream()
+    Set<UserGameDto> games = userGameRepository.findAll().stream()
         .filter(userGame -> userGame.getUser().getUsername().equals(username))
         .filter(userGame -> userGame.getGame().getGenre().getName().equals(genre))
         .map(UserGameDto::from)
         .collect(Collectors.toSet());
+
+    return checkIfEmpty(games);
   };
 
   public Set<UserGameDto> getUserGamesByStatus(String username, String status) {
-    return userGameRepository.findAll().stream()
+    Set<UserGameDto> games = userGameRepository.findAll().stream()
         .filter(userGame -> userGame.getUser().getUsername().equals(username))
         .filter(userGame -> userGame.getStatus().getName().equals(status))
         .map(UserGameDto::from)
         .collect(Collectors.toSet());
+
+    return checkIfEmpty(games);
   }
+
+  private Set<UserGameDto> checkIfEmpty(Set<UserGameDto> games) {
+    if (games.isEmpty()) {
+      throw new ResourceNotFoundException("No games found for the given criteria.");
+    }
+
+    return games;
+}
 }
