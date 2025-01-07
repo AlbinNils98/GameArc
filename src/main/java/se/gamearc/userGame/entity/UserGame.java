@@ -1,7 +1,10 @@
 package se.gamearc.userGame.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -33,16 +36,23 @@ public class UserGame extends BaseEntity {
   @JoinColumn(name = "status_id", nullable = false)
   private Status status;
 
+  @Size(max = 255)
   @Lob
   @Column( name = "comment")
   private String comment;
 
+  @Max(10)
+  @Min(1)
   @Column(name = "story_rating")
   private Integer storyRating;
 
+  @Max(10)
+  @Min(1)
   @Column(name = "graphics_rating")
   private Integer graphicsRating;
 
+  @Max(10)
+  @Min(1)
   @Column(name = "gameplay_rating")
   private Integer gameplayRating;
 
