@@ -5,6 +5,5 @@ services:
       - 'MYSQL_DATABASE=gamearcdb'
       - 'MYSQL_PASSWORD=secret'
       - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
     ports:
       - '3306:3306'
