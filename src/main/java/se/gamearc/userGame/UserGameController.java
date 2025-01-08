@@ -22,7 +22,7 @@ public class UserGameController {
     return userGameService.getAllUserGames(username);
   }
 
-  @GetMapping("user-games/{username}/name/{gameTitle}")
+  @GetMapping("user-games/{username}/title/{gameTitle}")
   public Set<UserGameDto> getUserGamesByTitle(@PathVariable String username, @PathVariable String gameTitle) {
     return userGameService.getUserGamesByTitle(username, gameTitle);
   }

@@ -24,10 +24,6 @@ public class UserGameService {
         .map(UserGameDto::from)
         .collect(Collectors.toSet());
 
-    if (games.isEmpty()) {
-      throw new ResourceNotFoundException("No games found");
-    }
-
     return checkIfEmpty(games);
   }
 
@@ -37,10 +33,6 @@ public class UserGameService {
         .filter(userGame -> userGame.getGame().getTitle().toLowerCase().contains(gameTitle.toLowerCase()))
         .map(UserGameDto::from)
         .collect(Collectors.toSet());
-
-    if (games.isEmpty()) {
-      throw new ResourceNotFoundException("No games found");
-    }
 
     return checkIfEmpty(games);
   }
