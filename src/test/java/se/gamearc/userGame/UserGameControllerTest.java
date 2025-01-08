@@ -56,9 +56,6 @@ public class UserGameControllerTest {
 
     mvc.perform(get(url))
         .andExpect(status().isOk())
-        .andDo(result -> {
-          System.out.println(result.getResponse().getContentAsString());
-        })
         .andExpect(jsonPath("$[0].game.title").value("game"))
         .andExpect(jsonPath("$[0].game.description").value("description"))
         .andExpect(jsonPath("$[0].game.cover").value("coverUrl"))
