@@ -42,7 +42,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build, Clean and Test with Maven
-        run: mvn clean install --file pom.xml -B
+        run: mvn clean install --file pom.xml
           
       - name: Package with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn package --file pom.xml
