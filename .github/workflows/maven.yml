@@ -33,12 +33,12 @@ jobs:
           distribution: 'temurin'
           java-version: '23'
           cache: maven
-    
+
       - name: Compile with Maven
         run: mvn -B compile --file pom.xml
 
       - name: Test with Maven
         run: mvn -B test --file pom.xml
-          
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml

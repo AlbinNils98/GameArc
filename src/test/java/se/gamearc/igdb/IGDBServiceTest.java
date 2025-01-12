@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.client.RestTemplate;
+import se.gamearc.GameArcApplication;
 import se.gamearc.game.igdb.IGDBGameDto;
 import se.gamearc.game.igdb.IGDBService;
 import se.gamearc.game.igdb.responses.IGDBCoverResponse;
@@ -17,8 +20,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-@SpringBootTest
+@SpringBootTest(classes = GameArcApplication.class)
+@TestPropertySource(properties = {
+    "igdb.client-id=client-id",
+    "igdb.key=api-key"
+})
 public class IGDBServiceTest {
 
   @Spy
@@ -63,7 +72,7 @@ public class IGDBServiceTest {
   @DisplayName("Should fetch games by title and only return list with size of 10 with starting position 0")
   void shouldFetchGamesByTitleAndOnlyReturnListWithSizeOf10WithStartingPosition0() {
 
-    Mockito.doReturn(games).when(service).sendPostRequest(Mockito.any(), Mockito.anyString());
+    Mockito.doReturn(games).when(service).sendPostRequest(Mockito.any(RestTemplate.class) ,Mockito.anyString());
 
     List<IGDBGameDto> result = service.fetchIGDBGamesByTitle("Call of Duty", 10, 0);
 
@@ -76,12 +85,15 @@ public class IGDBServiceTest {
             )
         )
     );
+
+    verify(service, times(1)).sendPostRequest(Mockito.any(RestTemplate.class), Mockito.anyString());
   }
 
   @Test
   @DisplayName("Should fetch next 10 games if offset is 10 but only with correct title")
   void shouldFetchNext10GamesIfOffsetIs10ButOnlyWithCorrectTitle() {
-    Mockito.doReturn(games).when(service).sendPostRequest(Mockito.any(), Mockito.anyString());
+
+    Mockito.doReturn(games).when(service).sendPostRequest(Mockito.any(RestTemplate.class) ,Mockito.anyString());
 
     List<IGDBGameDto> result = service.fetchIGDBGamesByTitle("Call of Duty", 10, 10);
 
