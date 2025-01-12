@@ -32,13 +32,17 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '23'
-          cache: maven
 
-      - name: Compile with Maven
-        run: mvn -B compile --file pom.xml
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-      - name: Test with Maven
-        run: mvn -B test --file pom.xml
-
-      - name: Build with Maven
+      - name: Build, Clean and Test with Maven
+        run: mvn clean install --file pom.xml -B
+          
+      - name: Package with Maven
         run: mvn -B package --file pom.xml
