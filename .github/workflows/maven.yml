@@ -19,6 +19,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
+      IGDB_KEY: ${{ secrets.IGDB_KEY }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
