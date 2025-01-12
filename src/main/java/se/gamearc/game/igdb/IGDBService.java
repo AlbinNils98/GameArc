@@ -22,7 +22,6 @@ public class IGDBService {
   @Value("${igdb.key}")
   private String IGDB_KEY;
 
-
   private RestTemplate createRestTemplate() {
     return new RestTemplateBuilder(rt -> rt
         .getInterceptors().add((request, body, execution) -> {
@@ -67,8 +66,7 @@ public class IGDBService {
     return games.subList(fromIndex, toIndex);
   }
 
-
-  private List<IGDBGameResponse> sendPostRequest(RestTemplate restTemplate, String requestBody) {
+  public List<IGDBGameResponse> sendPostRequest(RestTemplate restTemplate, String requestBody) {
     HttpEntity<String> entity = new HttpEntity<>(requestBody);
 
     try {
