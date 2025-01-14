@@ -36,7 +36,7 @@ public class IGDBService {
     RestTemplate restTemplate = createRestTemplate();
 
     String requestBody = String.format("""
-        fields id, name, summary, cover.url, genres.name;
+        fields name, summary, cover.url, genres.name;
         search "%s";
         where category = 0 & version_parent = null;
         limit 100;

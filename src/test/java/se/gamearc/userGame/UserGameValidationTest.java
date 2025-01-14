@@ -14,6 +14,7 @@ import se.gamearc.user.entity.User;
 import se.gamearc.userGame.entity.Status;
 import se.gamearc.userGame.entity.UserGame;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -38,13 +39,15 @@ public class UserGameValidationTest {
     user.setPassword("password");
     user.setEmail("email@email.com");
 
+    Set<Genre> genreSet = new HashSet<>();
     Genre genre = new Genre();
     genre.setName("genre");
+    genreSet.add(genre);
 
     game.setTitle("title");
     game.setDescription("description");
     game.setCover("cover");
-    game.setGenre(genre);
+    game.setGenres(genreSet);
 
     Status status = new Status();
     status.setName("status");
@@ -69,19 +72,6 @@ public class UserGameValidationTest {
     Set<ConstraintViolation<UserGame>> violations = validator.validate(userGame);
     assertFalse(violations.isEmpty(), "There should be violations from not valid status object");
     assertEquals(1, violations.size(), "There should be one violations from not valid status object");
-  }
-
-  @Test
-  @DisplayName("Comment in UserGame should be within max limit")
-  void commentInUserGameShouldBeWithinMaxLimit() {
-    Set<ConstraintViolation<UserGame>> noViolations = validator.validate(userGame);
-    assertTrue(noViolations.isEmpty(), "There should be no violation when not exceeding max char");
-
-    userGame.setComment("A".repeat(256));
-
-    Set<ConstraintViolation<UserGame>> violations = validator.validate(userGame);
-    assertFalse(violations.isEmpty(), "There should be a violation from exceeding max char");
-    assertEquals(1, violations.size(), "There should be one violations from exceeding max char");
   }
 
   @Test

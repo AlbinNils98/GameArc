@@ -1,25 +1,25 @@
 package se.gamearc.game.service;
 
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
+import se.gamearc.exception.ResourceNotFoundException;
 import se.gamearc.game.dto.GameDto;
 import se.gamearc.game.entity.Game;
+import se.gamearc.game.igdb.IGDBGameDto;
 import se.gamearc.game.repository.GameRepository;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class GameService {
 
+  GenreService genreService;
   GameRepository gameRepository;
 
-  public GameService(GameRepository gameRepository) {
+  public GameService(GameRepository gameRepository, GenreService genreService) {
     this.gameRepository = gameRepository;
+    this.genreService = genreService;
   }
 
   public Set<GameDto> getAllGames() {
@@ -39,5 +39,15 @@ public class GameService {
         .map(GameDto::from)
         .collect(Collectors.toSet());
     return games;
+  }
+
+  @Transactional
+  public Game findOrCreateGame(IGDBGameDto igdbGame) {
+    return gameRepository.findByTitle(igdbGame.title())
+        .orElseGet(() -> {
+          Game game = igdbGame.toGame();
+          game.setGenres(genreService.findOrCreate(igdbGame.genres()));
+          return gameRepository.save(game);
+        });
   }
 }

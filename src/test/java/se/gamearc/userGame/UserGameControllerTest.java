@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import se.gamearc.exception.ResourceNotFoundException;
 import se.gamearc.game.dto.GameDto;
 import se.gamearc.game.dto.GenreDto;
+import se.gamearc.userGame.dto.UserGameDto;
 
 
 import java.util.HashSet;
@@ -37,14 +38,18 @@ public class UserGameControllerTest {
 
   @BeforeAll
   static void setUp() {
+    Set<String> genres = new HashSet<>();
+    genres.add("genre");
+
     userGames.add(
         new UserGameDto(
-            new GameDto("game",
+            1,
+            new GameDto(
+                "game",
                 "description",
                 "coverUrl",
                 1,
-                new GenreDto(
-                    "genre")),
+                genres),
             "status",
             "comment",
             1, 1, 1));
@@ -60,7 +65,7 @@ public class UserGameControllerTest {
         .andExpect(jsonPath("$[0].game.description").value("description"))
         .andExpect(jsonPath("$[0].game.cover").value("coverUrl"))
         .andExpect(jsonPath("$[0].game.totalRating").value(1))
-        .andExpect(jsonPath("$[0].game.genre.name").value("genre"))
+        .andExpect(jsonPath("$[0].game.genres[0]").value("genre"))
         .andExpect(jsonPath("$[0].comment").value("comment"))
         .andExpect(jsonPath("$[0].status").value("status"))
         .andExpect(jsonPath("$[0].storyRating").value(1))
@@ -81,8 +86,8 @@ public class UserGameControllerTest {
   @DisplayName("Fetching all users games should return a json object and status code ok if not empty")
   void fetchingAllUsersGamesShouldReturnAJsonObjectAndStatusCodeOkIfNotEmpty() throws Exception {
     fetchResourceAndAssertWithResource(
-        "/api/user-games/username",
-        () -> Mockito.when(userGameService.getAllUserGames("username"))
+        "/api/user-games/1",
+        () -> Mockito.when(userGameService.getAllUserGames(1))
             .thenReturn(userGames)
     );
   }
@@ -91,8 +96,8 @@ public class UserGameControllerTest {
   @DisplayName("Fetching all of users game should return error response when no resource found")
   void fetchingAllOfUsersGameShouldReturnErrorResponseWhenNoResourceFound() throws Exception {
     fetchResourceAndAssertResourceNotFound(
-        "/api/user-games/username",
-        () -> Mockito.when(userGameService.getAllUserGames("username"))
+        "/api/user-games/1",
+        () -> Mockito.when(userGameService.getAllUserGames(1))
             .thenThrow(new ResourceNotFoundException("No games found"))
     );
   }
@@ -101,8 +106,8 @@ public class UserGameControllerTest {
   @DisplayName("Fetching users games by genre should return a json object and return status ok if not empty")
   void fetchingUsersGamesByGenreShouldReturnAJsonObjectAndReturnStatusOkIfNotEmpty() throws Exception {
     fetchResourceAndAssertWithResource(
-        "/api/user-games/username/genre/genreName",
-        () -> Mockito.when(userGameService.getUserGamesByGenre("username", "genreName"))
+        "/api/user-games/1/genre/genreName",
+        () -> Mockito.when(userGameService.getUserGamesByGenre(1, "genreName"))
             .thenReturn(userGames)
     );
   }
@@ -111,8 +116,8 @@ public class UserGameControllerTest {
   @DisplayName("Fetching users game by genre should return error response if no resource found")
   void fetchingUsersGameByGenreShouldReturnErrorResponseIfNoResourceFound() throws Exception {
     fetchResourceAndAssertResourceNotFound(
-        "/api/user-games/username/genre/genreName",
-        () -> Mockito.when(userGameService.getUserGamesByGenre("username", "genreName"))
+        "/api/user-games/1/genre/genreName",
+        () -> Mockito.when(userGameService.getUserGamesByGenre(1, "genreName"))
             .thenThrow(new ResourceNotFoundException("No games found"))
     );
   }
@@ -121,8 +126,8 @@ public class UserGameControllerTest {
   @DisplayName("Fetching a users games by title should return json object and status ok if not empty")
   void fetchingAUsersGamesByTitleShouldReturnJsonObjectAndStatusOkIfNotEmpty() throws Exception {
     fetchResourceAndAssertWithResource(
-        "/api/user-games/username/title/gameTitle",
-        () -> Mockito.when(userGameService.getUserGamesByTitle("username", "gameTitle"))
+        "/api/user-games/1/title/gameTitle",
+        () -> Mockito.when(userGameService.getUserGamesByTitle(1, "gameTitle"))
             .thenReturn(userGames)
     );
   }
@@ -131,8 +136,8 @@ public class UserGameControllerTest {
   @DisplayName("Fetching users game by game title should return error if no resource found")
   void fetchingUsersGameByGameTitleShouldReturnErrorIfNoResourceFound() throws Exception {
     fetchResourceAndAssertResourceNotFound(
-        "/api/user-games/username/title/gameTitle",
-        () -> Mockito.when(userGameService.getUserGamesByTitle("username", "gameTitle"))
+        "/api/user-games/1/title/gameTitle",
+        () -> Mockito.when(userGameService.getUserGamesByTitle(1, "gameTitle"))
             .thenThrow(new ResourceNotFoundException("No games found"))
     );
   }
@@ -141,8 +146,8 @@ public class UserGameControllerTest {
   @DisplayName("Fetching a users games by status should return json object and status ok if not empty")
   void fetchingAUsersGamesByStatusShouldReturnJsonObjectAndStatusOkIfNotEmpty() throws Exception {
     fetchResourceAndAssertWithResource(
-        "/api/user-games/username/status/statusName",
-        () -> Mockito.when(userGameService.getUserGamesByStatus("username", "statusName"))
+        "/api/user-games/1/status/statusName",
+        () -> Mockito.when(userGameService.getUserGamesByStatus(1, "statusName"))
             .thenReturn(userGames)
     );
   }
@@ -151,8 +156,8 @@ public class UserGameControllerTest {
   @DisplayName("Fetching users games by status should return error response if no resource found")
   void fetchingUsersGamesByStatusShouldReturnErrorResponseIfNoResourceFound() throws Exception {
     fetchResourceAndAssertResourceNotFound(
-        "/api/user-games/username/status/statusName",
-        () -> Mockito.when(userGameService.getUserGamesByStatus("username", "statusName"))
+        "/api/user-games/1/status/statusName",
+        () -> Mockito.when(userGameService.getUserGamesByStatus(1, "statusName"))
             .thenThrow(new ResourceNotFoundException("No games found"))
     );
   }

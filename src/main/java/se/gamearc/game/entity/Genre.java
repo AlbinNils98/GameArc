@@ -21,7 +21,7 @@ public class Genre extends BaseEntity {
   @Column(name = "name", nullable = false)
   private String name;
 
-  @OneToMany(mappedBy = "genre")
+  @ManyToMany(mappedBy = "genres")
   private Set<Game> games = new LinkedHashSet<>();
 
 }

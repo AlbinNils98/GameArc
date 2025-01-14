@@ -38,7 +38,7 @@ public class GameControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().contentType("application/json;"))
         .andExpect(jsonPath("$.size()").value(mockedGames.size()))
-        .andExpect(jsonPath("$[0].name").value("Call of Duty"))
-        .andExpect(jsonPath("$[1].name").value("Call of Duty 2"));
+        .andExpect(jsonPath("$[0].title").value("Call of Duty"))
+        .andExpect(jsonPath("$[1].title").value("Call of Duty 2"));
   }
 }

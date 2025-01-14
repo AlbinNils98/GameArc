@@ -19,7 +19,7 @@ public class User extends BaseEntity  {
 
   @Size(max = 255)
   @NotNull
-  @Column(name = "username", nullable = false)
+  @Column(name = "username", nullable = false, unique = true)
   private String username;
 
   @Size(max = 60)

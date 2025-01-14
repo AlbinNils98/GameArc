@@ -12,6 +12,9 @@ import org.hibernate.annotations.OnDeleteAction;
 import se.gamearc.BaseEntity;
 import se.gamearc.game.entity.Game;
 import se.gamearc.user.entity.User;
+import se.gamearc.userGame.api.Ratings;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,9 +39,8 @@ public class UserGame extends BaseEntity {
   @JoinColumn(name = "status_id", nullable = false)
   private Status status;
 
-  @Size(max = 255)
   @Lob
-  @Column( name = "comment")
+  @Column( name = "comment", columnDefinition = "TEXT")
   private String comment;
 
   @Max(10)
@@ -56,9 +58,22 @@ public class UserGame extends BaseEntity {
   @Column(name = "gameplay_rating")
   private Integer gameplayRating;
 
-  private Integer calculateAverageRating() {
-    return (storyRating + graphicsRating + gameplayRating) / 3;
-  }
+  public void checkThenSetRatings(Ratings ratings) {
+    List<Integer> ratingsList = List.of(
+        ratings.storyRating(),
+        ratings.graphicsRating(),
+        ratings.gameplayRating()
+    );
 
+    ratingsList.forEach(rating -> {
+      if (rating < 1 || rating > 10) {
+        throw new IllegalArgumentException("Rating must be between 1 and 10");
+      }
+    });
+
+    this.storyRating = ratings.storyRating();
+    this.graphicsRating = ratings.graphicsRating();
+    this.gameplayRating = ratings.gameplayRating();
+  }
 
 }
