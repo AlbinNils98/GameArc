@@ -1,5 +1,8 @@
 package se.gamearc.userGame;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,14 +10,22 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import se.gamearc.exception.ResourceNotFoundException;
 import se.gamearc.game.dto.GameDto;
-import se.gamearc.game.dto.GenreDto;
+import se.gamearc.game.entity.Game;
+import se.gamearc.game.entity.Genre;
+import se.gamearc.game.igdb.IGDBGameDto;
+import se.gamearc.user.entity.User;
 import se.gamearc.userGame.dto.UserGameDto;
+import se.gamearc.userGame.dto.UserIGDBGameDto;
+import se.gamearc.userGame.entity.Status;
+import se.gamearc.userGame.entity.UserGame;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -160,6 +171,113 @@ public class UserGameControllerTest {
         () -> Mockito.when(userGameService.getUserGamesByStatus(1, "statusName"))
             .thenThrow(new ResourceNotFoundException("No games found"))
     );
+  }
+
+  @Test
+  @DisplayName("Making a Post request to add a new user game should return 201 created if successful")
+  void makingAPostRequestToAddANewUserGameShouldReturn201CreatedIfSuccessful() throws Exception {
+    
+    UserIGDBGameDto userIGDBGameDto = new UserIGDBGameDto(
+        new IGDBGameDto("title", "desc", "cover", List.of("genre")),
+        "status",
+        "comment",
+        1,1,1
+    );
+
+    UserGame userGame = getUserGame();
+
+    Mockito.when(userGameService.saveUserGame(1, userIGDBGameDto)).thenReturn(userGame);
+
+    mvc.perform(post("/api/user-games/1")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(new ObjectMapper().writeValueAsString(userIGDBGameDto)))
+        .andExpect(status().isCreated())
+        .andExpect(header().string("Location", "/api/user-games/1/title"));
+  }
+
+  @Test
+  @DisplayName("Making a POST request to add a new user game should return status 404 not found if user or status not found")
+  void makingAPostRequestToAddANewUserGameShouldReturnStatus404NotFoundIfUserOrStatusNotFound() throws Exception {
+    UserIGDBGameDto userIGDBGameDto = new UserIGDBGameDto(
+        new IGDBGameDto("title", "desc", "cover", List.of("genre")),
+        "status",
+        "comment",
+        1,1,1
+    );
+
+    UserGame userGame = getUserGame();
+
+    Mockito.when(userGameService.saveUserGame(1, userIGDBGameDto))
+        .thenThrow(new ResourceNotFoundException("User or status not found"));
+
+    mvc.perform(post("/api/user-games/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new ObjectMapper().writeValueAsString(userIGDBGameDto)))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.message").value("User or status not found"))
+        .andExpect(jsonPath("$.details").value("uri=/api/user-games/1"));
+
+  }
+
+  @Test
+  @DisplayName("Making a PUT request for editing a user game should return status 200 ok if successful")
+  void makingAPutRequestForEditingAUserGameShouldReturnStatus200OkIfSuccessful() throws Exception {
+    UserGameDto userGameDto = getuserGameDto();
+
+    mvc.perform(put("/api/user-games/1")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(new ObjectMapper().writeValueAsString(userGameDto)))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("Making a PUT request for editing a user game should return status 404 not found if some value in userGameDto is not found")
+  void makingAPutRequestForEditingAUserGameShouldReturnStatus404NotFoundIfSomeValueInUserGameDtoIsNotFound() throws Exception {
+    UserGameDto userGameDto = getuserGameDto();
+
+    Mockito.doThrow(new ResourceNotFoundException("Some value in userGameDto is wrong or not in users library"))
+            .when(userGameService).updateUserGame(1, userGameDto);
+
+    mvc.perform(put("/api/user-games/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new ObjectMapper().writeValueAsString(userGameDto)))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.message").value("Some value in userGameDto is wrong or not in users library"))
+        .andExpect(jsonPath("$.details").value("uri=/api/user-games/1"));
+
+  }
+
+  private static UserGameDto getuserGameDto() {
+    GameDto gameDto = new GameDto("title", "desc", "cover", 1, Set.of("genre"));
+
+    return new UserGameDto(1, gameDto, "status", "comment", 1,1,1);
+  }
+
+  private static @NotNull UserGame getUserGame() {
+    Set<Genre> genres = new HashSet<>();
+    Genre genre = new Genre();
+    genre.setName("genre");
+    genres.add(genre);
+
+    Game game = new Game();
+    game.setTitle("title");
+    game.setDescription("desc");
+    game.setTotalRating(0);
+    game.setGenres(genres);
+
+    Status status = new Status();
+    status.setName("status");
+
+    UserGame userGame = new UserGame();
+    userGame.setId(1);
+    userGame.setUser(new User());
+    userGame.setGame(game);
+    userGame.setStatus(status);
+    userGame.setComment("comment");
+    userGame.setStoryRating(1);
+    userGame.setGameplayRating(1);
+    userGame.setGraphicsRating(1);
+    return userGame;
   }
 
 }
