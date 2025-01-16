@@ -8,13 +8,13 @@ import se.gamearc.game.service.GameService;
 import se.gamearc.game.service.GenreService;
 import se.gamearc.user.repository.UserRepository;
 import se.gamearc.userGame.api.Ratings;
+import se.gamearc.userGame.dto.UserGameUpdateDto;
 import se.gamearc.userGame.dto.UserIGDBGameDto;
 import se.gamearc.userGame.dto.UserGameDto;
 import se.gamearc.userGame.entity.UserGame;
 import se.gamearc.userGame.repository.StatusRepository;
 import se.gamearc.userGame.repository.UserGameRepository;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -99,20 +99,22 @@ public class UserGameService {
     return userGameRepository.save(userGame);
   }
 
-  public void updateUserGame(Integer userId, UserGameDto userGameDto) {
-    UserGame userGame = userGameRepository.findUserGameByGameTitleAndUserId(userGameDto.game().title(), userId)
-        .orElseThrow(() -> new ResourceNotFoundException("No game found with user id: " + userId + "and game title: " + userGameDto.game().title()));
+  public void updateUserGame(Integer userId, UserGameUpdateDto userGameUpdateDto) {
+    UserGame userGame = userGameRepository.findUserGameByGameIdAndUserId(userGameUpdateDto.gameId(), userId)
+        .orElseThrow(() -> new ResourceNotFoundException("No game found with user id: %d and/or game id: %d"
+            .formatted(userId, userGameUpdateDto.gameId())));
+
+    userGame.setStatus(statusRepository.findByName(userGameUpdateDto.status()).orElseThrow(
+        () -> new ResourceNotFoundException("Status not found")
+    ));
     
-    userGame.checkThenSetRatings(Ratings.fromUserGameDto(userGameDto));
-    if (!Objects.equals(userGame.getComment(), userGameDto.comment())) {
-      userGame.setComment(userGameDto.comment());
-      System.out.println("Comment updated to: " + userGameDto.comment());
+    userGame.checkThenSetRatings(Ratings.fromUserGameUpdateDto(userGameUpdateDto));
+    if (!Objects.equals(userGame.getComment(), userGameUpdateDto.comment())) {
+      userGame.setComment(userGameUpdateDto.comment());
+      System.out.println("Comment updated to: " + userGameUpdateDto.comment());
       System.out.println("New comment is: " + userGame.getComment());
     }
     userGame.setComment(userGame.getComment());
-    userGame.setStatus(statusRepository.findByName(userGameDto.status()).orElseThrow(
-        () -> new ResourceNotFoundException("Status not found")
-    ));
 
     userGameRepository.save(userGame);
   }

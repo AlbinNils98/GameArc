@@ -19,7 +19,7 @@ public class GenreService {
   }
 
   @Transactional
-  public Set<Genre> findOrCreate(List<String> genres) {
+  public Set<Genre> findOrCreateGenre(List<String> genres) {
     Set<Genre> genresSet = new HashSet<>();
 
     genres.forEach(genreName -> {

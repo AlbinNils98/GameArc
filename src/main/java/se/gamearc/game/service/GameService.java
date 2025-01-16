@@ -22,7 +22,7 @@ public class GameService {
     return gameRepository.findByTitle(igdbGame.title())
         .orElseGet(() -> {
           Game game = igdbGame.toGame();
-          game.setGenres(genreService.findOrCreate(igdbGame.genres()));
+          game.setGenres(genreService.findOrCreateGenre(igdbGame.genres()));
           return gameRepository.save(game);
         });
   }

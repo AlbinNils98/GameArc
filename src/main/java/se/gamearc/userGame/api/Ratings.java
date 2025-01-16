@@ -1,15 +1,15 @@
 package se.gamearc.userGame.api;
 
-import se.gamearc.userGame.dto.UserGameDto;
+import se.gamearc.userGame.dto.UserGameUpdateDto;
 import se.gamearc.userGame.dto.UserIGDBGameDto;
 
 public record Ratings(Integer storyRating, Integer graphicsRating, Integer gameplayRating) {
 
-  public static Ratings fromUserGameDto(UserGameDto userGameDto) {
+  public static Ratings fromUserGameUpdateDto(UserGameUpdateDto userGameUpdateDto) {
     return new Ratings(
-        userGameDto.storyRating(),
-        userGameDto.graphicsRating(),
-        userGameDto.gameplayRating()
+        userGameUpdateDto.storyRating(),
+        userGameUpdateDto.graphicsRating(),
+        userGameUpdateDto.gameplayRating()
     );
   }
 

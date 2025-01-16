@@ -2,6 +2,7 @@ package se.gamearc.userGame;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import se.gamearc.userGame.dto.UserGameUpdateDto;
 import se.gamearc.userGame.dto.UserIGDBGameDto;
 import se.gamearc.userGame.dto.UserGameDto;
 import se.gamearc.userGame.entity.UserGame;
@@ -48,8 +49,8 @@ public class UserGameController {
   }
 
   @PutMapping("user-games/{userId}")
-  public ResponseEntity<Void> updateUserGame(@PathVariable Integer userId, @RequestBody UserGameDto userGameDto) {
-    userGameService.updateUserGame(userId, userGameDto);
+  public ResponseEntity<Void> updateUserGame(@PathVariable Integer userId, @RequestBody UserGameUpdateDto userGameUpdateDto) {
+    userGameService.updateUserGame(userId, userGameUpdateDto);
     return ResponseEntity.ok().build();
   }
 
