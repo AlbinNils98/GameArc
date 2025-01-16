@@ -8,8 +8,19 @@ CREATE TABLE IF NOT EXISTS game(
     title VARCHAR(255) NOT NULL,
     description TEXT,
     cover VARCHAR(500),
-    total_rating INT CHECK ( total_rating BETWEEN 1 AND 10),
+    total_rating INT CHECK ( total_rating BETWEEN 1 AND 10)
+);
+
+CREATE TABLE IF NOT EXISTS genre(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS game_genre(
+    game_id INT,
     genre_id INT,
+    PRIMARY KEY (game_id, genre_id),
+    FOREIGN KEY (game_id) REFERENCES game(id) ON DELETE CASCADE,
     FOREIGN KEY (genre_id) REFERENCES genre(id) ON DELETE CASCADE
 );
 

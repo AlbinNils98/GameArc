@@ -1,8 +1,8 @@
 package se.gamearc.game;
 
 import org.springframework.web.bind.annotation.*;
-import se.gamearc.game.igdb.IGDBGameDto;
-import se.gamearc.game.igdb.IGDBService;
+import se.gamearc.igdb.IGDBGameDto;
+import se.gamearc.igdb.IGDBService;
 
 import java.util.List;
 

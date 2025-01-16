@@ -8,8 +8,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import se.gamearc.game.GameController;
-import se.gamearc.game.igdb.IGDBGameDto;
-import se.gamearc.game.igdb.IGDBService;
 
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class GameControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().contentType("application/json;"))
         .andExpect(jsonPath("$.size()").value(mockedGames.size()))
-        .andExpect(jsonPath("$[0].name").value("Call of Duty"))
-        .andExpect(jsonPath("$[1].name").value("Call of Duty 2"));
+        .andExpect(jsonPath("$[0].title").value("Call of Duty"))
+        .andExpect(jsonPath("$[1].title").value("Call of Duty 2"));
   }
 }

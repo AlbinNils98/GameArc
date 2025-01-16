@@ -25,7 +25,7 @@ public class Game extends BaseEntity {
   private String title;
 
   @Lob
-  @Column(name = "description")
+  @Column(name = "description", columnDefinition = "TEXT")
   private String description;
 
   @Size(max = 500)
@@ -35,10 +35,13 @@ public class Game extends BaseEntity {
   @Column(name = "total_rating")
   private Integer totalRating;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  @JoinColumn(name = "genre_id")
-  private Genre genre;
+  @ManyToMany
+  @JoinTable(
+      name = "game_genre",
+      joinColumns = @JoinColumn(name = "game_id"),
+      inverseJoinColumns = @JoinColumn(name = "genre_id")
+  )
+  private Set<Genre> genres = new LinkedHashSet<>();
 
   @OneToMany(mappedBy = "game")
   private Set<UserGame> userGames = new LinkedHashSet<>();

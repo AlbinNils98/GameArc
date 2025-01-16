@@ -1,10 +1,13 @@
 package se.gamearc.userGame;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import se.gamearc.userGame.dto.UserGameUpdateDto;
+import se.gamearc.userGame.dto.UserIGDBGameDto;
+import se.gamearc.userGame.dto.UserGameDto;
+import se.gamearc.userGame.entity.UserGame;
 
+import java.net.URI;
 import java.util.Set;
 
 @RequestMapping("/api/")
@@ -17,23 +20,38 @@ public class UserGameController {
     this.userGameService = userGameService;
   }
 
-  @GetMapping("user-games/{username}")
-  public Set<UserGameDto> getUserGames(@PathVariable String username) {
-    return userGameService.getAllUserGames(username);
+  @GetMapping("user-games/{userId}")
+  public Set<UserGameDto> getUserGames(@PathVariable Integer userId) {
+    return userGameService.getAllUserGames(userId);
   }
 
-  @GetMapping("user-games/{username}/title/{gameTitle}")
-  public Set<UserGameDto> getUserGamesByTitle(@PathVariable String username, @PathVariable String gameTitle) {
-    return userGameService.getUserGamesByTitle(username, gameTitle);
+  @GetMapping("user-games/{userId}/title/{gameTitle}")
+  public Set<UserGameDto> getUserGamesByTitle(@PathVariable Integer userId, @PathVariable String gameTitle) {
+    return userGameService.getUserGamesByTitle(userId, gameTitle);
   }
 
-  @GetMapping("user-games/{username}/genre/{gameGenre}")
-  public Set<UserGameDto> getUserGamesByGenre(@PathVariable String username, @PathVariable String gameGenre) {
-    return userGameService.getUserGamesByGenre(username, gameGenre);
+  @GetMapping("user-games/{userId}/genre/{gameGenre}")
+  public Set<UserGameDto> getUserGamesByGenre(@PathVariable Integer userId, @PathVariable String gameGenre) {
+    return userGameService.getUserGamesByGenre(userId, gameGenre);
   }
 
-  @GetMapping("user-games/{username}/status/{status}")
-  public Set<UserGameDto> getUserGamesByStatus(@PathVariable String username, @PathVariable String status) {
-    return userGameService.getUserGamesByStatus(username, status);
+  @GetMapping("user-games/{userId}/status/{status}")
+  public Set<UserGameDto> getUserGamesByStatus(@PathVariable Integer userId, @PathVariable String status) {
+    return userGameService.getUserGamesByStatus(userId, status);
   }
+
+  @PostMapping("user-games/{userId}")
+  public ResponseEntity<Void> saveUserGame(@PathVariable Integer userId, @RequestBody UserIGDBGameDto userIGDBGameDto) {
+    UserGame game = userGameService.saveUserGame(userId, userIGDBGameDto);
+    String encodedTitle = game.getGame().getTitle().replace(" ", "%20");
+    String location = "/api/user-games/%d/%s".formatted(userId, encodedTitle);
+    return ResponseEntity.created(URI.create(location)).build();
+  }
+
+  @PutMapping("user-games/{userId}")
+  public ResponseEntity<Void> updateUserGame(@PathVariable Integer userId, @RequestBody UserGameUpdateDto userGameUpdateDto) {
+    userGameService.updateUserGame(userId, userGameUpdateDto);
+    return ResponseEntity.ok().build();
+  }
+
 }

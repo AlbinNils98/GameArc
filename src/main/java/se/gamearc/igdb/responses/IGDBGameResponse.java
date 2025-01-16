@@ -1,4 +1,4 @@
-package se.gamearc.game.igdb.responses;
+package se.gamearc.igdb.responses;
 
 import java.util.ArrayList;
 import java.util.List;

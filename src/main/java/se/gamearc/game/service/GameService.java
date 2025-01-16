@@ -1,43 +1,29 @@
 package se.gamearc.game.service;
 
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import se.gamearc.game.dto.GameDto;
+import org.springframework.transaction.annotation.Transactional;
 import se.gamearc.game.entity.Game;
+import se.gamearc.igdb.IGDBGameDto;
 import se.gamearc.game.repository.GameRepository;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class GameService {
 
+  GenreService genreService;
   GameRepository gameRepository;
 
-  public GameService(GameRepository gameRepository) {
+  public GameService(GameRepository gameRepository, GenreService genreService) {
     this.gameRepository = gameRepository;
+    this.genreService = genreService;
   }
 
-  public Set<GameDto> getAllGames() {
-    return gameRepository.findAll().stream()
-        .map(GameDto::from)
-        .collect(Collectors.toSet());
-  }
-
-  public GameDto getGameById(int id) {
-    return GameDto.from(gameRepository.findById(id).get());
-  }
-
-  public Set<GameDto> getGameByName(String name) {
-    Set<GameDto> games = gameRepository.findAll().stream()
-        .filter(game ->
-            game.getTitle().toLowerCase().contains(name.toLowerCase()))
-        .map(GameDto::from)
-        .collect(Collectors.toSet());
-    return games;
+  @Transactional
+  public Game findOrCreateGame(IGDBGameDto igdbGame) {
+    return gameRepository.findByTitle(igdbGame.title())
+        .orElseGet(() -> {
+          Game game = igdbGame.toGame();
+          game.setGenres(genreService.findOrCreateGenre(igdbGame.genres()));
+          return gameRepository.save(game);
+        });
   }
 }
