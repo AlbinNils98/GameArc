@@ -1,4 +1,4 @@
-package se.gamearc.game.igdb.responses;
+package se.gamearc.igdb.responses;
 
 public record IGDBGenreResponse(Integer id, String name) {
 }

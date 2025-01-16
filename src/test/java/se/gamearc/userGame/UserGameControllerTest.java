@@ -1,6 +1,5 @@
 package se.gamearc.userGame;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +15,7 @@ import se.gamearc.exception.ResourceNotFoundException;
 import se.gamearc.game.dto.GameDto;
 import se.gamearc.game.entity.Game;
 import se.gamearc.game.entity.Genre;
-import se.gamearc.game.igdb.IGDBGameDto;
+import se.gamearc.igdb.IGDBGameDto;
 import se.gamearc.user.entity.User;
 import se.gamearc.userGame.dto.UserGameDto;
 import se.gamearc.userGame.dto.UserIGDBGameDto;

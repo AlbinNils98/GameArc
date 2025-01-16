@@ -1,7 +1,6 @@
 package se.gamearc.game.dto;
 
 import se.gamearc.game.entity.Game;
-import se.gamearc.game.igdb.IGDBGameDto;
 
 import java.util.Set;
 import java.util.stream.Collectors;

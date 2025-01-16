@@ -42,7 +42,9 @@ public class UserGameController {
   @PostMapping("user-games/{userId}")
   public ResponseEntity<Void> saveUserGame(@PathVariable Integer userId, @RequestBody UserIGDBGameDto userIGDBGameDto) {
     UserGame game = userGameService.saveUserGame(userId, userIGDBGameDto);
-    return ResponseEntity.created(URI.create("/api/user-games/" + userId + "/" + userIGDBGameDto.game().title())).build();
+    String encodedTitle = game.getGame().getTitle().replace(" ", "%20");
+    String location = "/api/user-games/%d/%s".formatted(userId, encodedTitle);
+    return ResponseEntity.created(URI.create(location)).build();
   }
 
   @PutMapping("user-games/{userId}")
@@ -50,4 +52,5 @@ public class UserGameController {
     userGameService.updateUserGame(userId, userGameDto);
     return ResponseEntity.ok().build();
   }
+
 }

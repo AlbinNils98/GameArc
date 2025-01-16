@@ -8,8 +8,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import se.gamearc.game.GameController;
-import se.gamearc.game.igdb.IGDBGameDto;
-import se.gamearc.game.igdb.IGDBService;
 
 import java.util.List;
 

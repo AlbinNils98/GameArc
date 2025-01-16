@@ -1,4 +1,4 @@
-package se.gamearc.game.igdb;
+package se.gamearc.igdb;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -7,7 +7,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import se.gamearc.game.igdb.responses.IGDBGameResponse;
+import se.gamearc.igdb.responses.IGDBGameResponse;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,7 +1,7 @@
-package se.gamearc.game.igdb;
+package se.gamearc.igdb;
 
 import se.gamearc.game.entity.Game;
-import se.gamearc.game.igdb.responses.IGDBGameResponse;
+import se.gamearc.igdb.responses.IGDBGameResponse;
 
 import java.util.List;
 
