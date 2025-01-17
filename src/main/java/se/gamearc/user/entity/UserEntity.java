@@ -1,5 +1,6 @@
 package se.gamearc.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,8 +15,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "user", schema = "gamearcdb")
-public class User extends BaseEntity  {
+@Table(name = "users", schema = "gamearcdb")
+public class UserEntity extends BaseEntity  {
 
   @Size(max = 255)
   @NotNull
@@ -24,13 +25,9 @@ public class User extends BaseEntity  {
 
   @Size(max = 60)
   @NotNull
+  @JsonIgnore
   @Column(name = "password", nullable = false, length = 60)
   private String password;
-
-  @Size(max = 100)
-  @NotNull
-  @Column(name = "email", nullable = false, length = 100)
-  private String email;
 
   @OneToMany(mappedBy = "user")
   private Set<UserGame> userGames = new LinkedHashSet<>();
