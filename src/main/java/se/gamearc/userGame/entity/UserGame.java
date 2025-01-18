@@ -11,7 +11,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import se.gamearc.BaseEntity;
 import se.gamearc.game.entity.Game;
-import se.gamearc.user.entity.User;
+import se.gamearc.user.entity.UserEntity;
 import se.gamearc.userGame.api.Ratings;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class UserGame extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_id", nullable = false)
-  private User user;
+  private UserEntity user;
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)

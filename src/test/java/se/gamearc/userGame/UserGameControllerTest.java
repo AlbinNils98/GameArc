@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -16,7 +17,8 @@ import se.gamearc.game.dto.GameDto;
 import se.gamearc.game.entity.Game;
 import se.gamearc.game.entity.Genre;
 import se.gamearc.igdb.IGDBGameDto;
-import se.gamearc.user.entity.User;
+import se.gamearc.user.entity.UserEntity;
+import se.gamearc.user.service.JWTService;
 import se.gamearc.userGame.dto.UserGameDto;
 import se.gamearc.userGame.dto.UserGameUpdateDto;
 import se.gamearc.userGame.dto.UserIGDBGameDto;
@@ -32,6 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserGameController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class UserGameControllerTest {
 
   @MockBean
@@ -39,6 +42,9 @@ public class UserGameControllerTest {
 
   @Autowired
   private MockMvc mvc;
+
+  @MockBean
+  private JWTService jwtService;
 
   @FunctionalInterface
   private interface ServiceMockConfigurer {
@@ -233,7 +239,7 @@ public class UserGameControllerTest {
 
     UserGame userGame = new UserGame();
     userGame.setId(1);
-    userGame.setUser(new User());
+    userGame.setUser(new UserEntity());
     userGame.setGame(game);
     userGame.setStatus(status);
     userGame.setComment("comment");
