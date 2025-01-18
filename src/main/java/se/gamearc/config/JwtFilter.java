@@ -6,12 +6,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import se.gamearc.exception.InvalidJwtAuthenticationException;
 import se.gamearc.user.service.JWTService;
 import se.gamearc.user.service.MyUserDetailService;
 
@@ -34,19 +36,31 @@ public class JwtFilter extends OncePerRequestFilter {
 
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
       jwtToken = authHeader.substring(7);
-      username = jwtService.extractUsername(jwtToken);
+      try {
+        username = jwtService.extractUsername(jwtToken);
+      } catch (InvalidJwtAuthenticationException e) {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.getWriter().write("Invalid JWT token: " + e.getMessage());
+        return;
+      }
     }
 
-    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      UserDetails userDetails = context.getBean(MyUserDetailService.class).loadUserByUsername(username);
+    try {
+      if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        UserDetails userDetails = context.getBean(MyUserDetailService.class).loadUserByUsername(username);
 
-      if (jwtService.validateToken(jwtToken, userDetails)){
-        UsernamePasswordAuthenticationToken authToken =
-            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        authToken.setDetails(new WebAuthenticationDetailsSource()
-            .buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authToken);
+        if (jwtService.validateToken(jwtToken, userDetails)) {
+          UsernamePasswordAuthenticationToken authToken =
+              new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+          authToken.setDetails(new WebAuthenticationDetailsSource()
+              .buildDetails(request));
+          SecurityContextHolder.getContext().setAuthentication(authToken);
+        }
       }
+    }catch (InvalidJwtAuthenticationException e) {
+      response.setStatus(HttpStatus.UNAUTHORIZED.value());
+      response.getWriter().write("Invalid JWT token: " + e.getMessage());
+      return;
     }
     filterChain.doFilter(request, response);
   }

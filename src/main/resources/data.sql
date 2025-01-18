@@ -10,6 +10,13 @@ TRUNCATE TABLE game_genre;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
+INSERT INTO status (name)
+VALUES ('playing'),
+       ('owned'),
+       ('wishlist'),
+       ('completed'),
+       ('abandoned'),
+       ('on hold');
 # INSERT INTO genre (name)
 # VALUES ('RPG'),
 #        ('Shooter'),
@@ -22,13 +29,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 #        ('Horror'),
 #        ('Sports');
 #
-INSERT INTO status (name)
-VALUES ('playing'),
-       ('owned'),
-       ('wishlist'),
-       ('completed'),
-       ('abandoned'),
-       ('on hold');
+
 #
 # INSERT INTO game (title, description, cover, total_rating)
 # VALUES ('Elder Scrolls V: Skyrim', 'Epic fantasy RPG', 'cover_skyrim.jpg', 9),

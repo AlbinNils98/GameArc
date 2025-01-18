@@ -2,6 +2,7 @@ package se.gamearc.userGame;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import se.gamearc.exception.AlreadyExistsException;
 import se.gamearc.exception.ResourceNotFoundException;
 import se.gamearc.game.repository.GameRepository;
 import se.gamearc.game.service.GameService;
@@ -82,6 +83,14 @@ public class UserGameService {
 
 @Transactional
   public UserGame saveUserGame(Integer userId, UserIGDBGameDto userIGDBGameDto) {
+    userGameRepository.findUserGameByUserIdAndGameTitle(userId, userIGDBGameDto.game().title())
+        .ifPresent( userGame -> {
+          throw new AlreadyExistsException(
+              String.format("Game of title %s already exists in archive.",
+                  userGame.getGame().getTitle()));
+            }
+        );
+
     UserGame userGame = new UserGame();
     userGame.setUser(userRepository.findById(userId)
         .orElseThrow(

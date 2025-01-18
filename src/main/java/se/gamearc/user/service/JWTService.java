@@ -1,11 +1,14 @@
 package se.gamearc.user.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import se.gamearc.exception.InvalidJwtAuthenticationException;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -37,15 +40,15 @@ public class JWTService {
     Map<String, Object> claims = new HashMap<>();
     claims.put("username", username);
 
-      return Jwts.builder()
-          .claims()
-          .add(claims)
-          .subject(username)
-          .issuedAt(new Date(System.currentTimeMillis()))
-          .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
-          .and()
-          .signWith(getKey())
-          .compact();
+    return Jwts.builder()
+        .claims()
+        .add(claims)
+        .subject(username)
+        .issuedAt(new Date(System.currentTimeMillis()))
+        .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
+        .and()
+        .signWith(getKey())
+        .compact();
   }
 
   private SecretKey getKey() {
@@ -54,7 +57,11 @@ public class JWTService {
   }
 
   public String extractUsername(String jwtToken) {
-    return extractClaim(jwtToken, Claims::getSubject);
+    try {
+      return extractClaim(jwtToken, Claims::getSubject);
+    }catch (Exception e) {
+      throw new InvalidJwtAuthenticationException("could not extract username");
+    }
   }
 
   private <T> T extractClaim(String jwtToken, Function<Claims, T> claimsResolver) {
@@ -71,15 +78,39 @@ public class JWTService {
   }
 
   public boolean validateToken(String jwtToken, UserDetails userDetails) {
-    final String username = extractUsername(jwtToken);
-    return (username.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken));
+    try {
+      final String username = extractUsername(jwtToken);
+      if (username.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken)) {
+        return true;
+      }
+    } catch (MalformedJwtException e) {
+      throw new InvalidJwtAuthenticationException("JWT token is malformed");
+    }catch (ExpiredJwtException e) {
+      throw new InvalidJwtAuthenticationException("JWT token has expired");
+    }catch (Exception e) {
+      throw new InvalidJwtAuthenticationException("Invalid JWT token");
+    }
+    return false;
   }
 
   private boolean isTokenExpired(String jwtToken) {
-    return extractExpiration(jwtToken).before(new Date());
+    try {
+      return extractExpiration(jwtToken).before(new Date());
+    }catch (NullPointerException e) {
+      throw new InvalidJwtAuthenticationException("JWT token expiration date is missing or malformed.");
+    }catch (Exception e) {
+      throw new InvalidJwtAuthenticationException("JWT token may be expired or has a malformed expiration date.");
+    }
   }
 
   private Date extractExpiration(String jwtToken) {
-    return extractClaim(jwtToken, Claims::getExpiration);
+    try {
+      return extractClaim(jwtToken, Claims::getExpiration);
+    }catch (NullPointerException e) {
+      throw new InvalidJwtAuthenticationException("JWT token expiration date is missing.");
+    }catch (Exception e) {
+      throw new InvalidJwtAuthenticationException("Failed to extract expiration date from JWT token.");
+    }
+
   }
 }
