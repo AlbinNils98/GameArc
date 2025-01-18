@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface UserGameRepository extends ListCrudRepository <UserGame, Integer>{
 
+  public Optional<UserGame> findUserGameByUserIdAndGameTitle(Integer userId, String gameTitle);
+
   public Optional<UserGame> findUserGameByGameIdAndUserId(Integer gameId, Integer userId);
 
   public List<UserGame> findUserGamesByUserId(Integer id);

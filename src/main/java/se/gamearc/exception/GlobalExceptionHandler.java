@@ -26,4 +26,16 @@ public class GlobalExceptionHandler {
     ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), request.getDescription(false));
     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
   }
+
+  @ExceptionHandler(AlreadyExistsException.class)
+  public ResponseEntity<ErrorResponse> handleAlreadyExistsException(AlreadyExistsException ex, WebRequest request) {
+    ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), request.getDescription(false));
+    return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+  }
+
+  @ExceptionHandler(InvalidJwtAuthenticationException.class)
+  public ResponseEntity<ErrorResponse> handleInvalidJwtAuthenticationException(InvalidJwtAuthenticationException ex, WebRequest request) {
+    ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), request.getDescription(false));
+    return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+  }
 }
