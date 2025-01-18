@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import se.gamearc.game.entity.Game;
 import se.gamearc.game.entity.Genre;
-import se.gamearc.user.entity.User;
+import se.gamearc.user.entity.UserEntity;
 import se.gamearc.userGame.entity.Status;
 import se.gamearc.userGame.entity.UserGame;
 
@@ -21,7 +21,7 @@ import java.util.Set;
 public class UserGameValidationTest {
 
   private final Validator validator;
-  private static final User user = new User();
+  private static final UserEntity user = new UserEntity();
   private static final Game game = new Game();
   private static final UserGame userGame = new UserGame();
 
@@ -37,7 +37,6 @@ public class UserGameValidationTest {
 
     user.setUsername("name");
     user.setPassword("password");
-    user.setEmail("email@email.com");
 
     Set<Genre> genreSet = new HashSet<>();
     Genre genre = new Genre();
