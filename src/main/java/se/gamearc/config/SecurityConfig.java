@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import se.gamearc.user.service.UserDetailsServiceImpl;
 
 import static org.springframework.http.HttpMethod.GET;
@@ -42,10 +43,18 @@ public class SecurityConfig {
             .anyRequest().authenticated()
         )
         .formLogin().disable()
-        .httpBasic().disable()
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-        .addFilter(new CustomAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))))
+        .addFilterBefore(sessionIdFilter(), UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(
+            new CustomAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))),
+            UsernamePasswordAuthenticationFilter.class)
+        .sessionManagement(session ->
+            session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
         .build();
+  }
+
+  @Bean
+  public JSessionIdFilter sessionIdFilter() {
+    return new JSessionIdFilter();
   }
 
   @Bean
