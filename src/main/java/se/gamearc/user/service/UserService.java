@@ -19,11 +19,6 @@ public class UserService {
   @Autowired
   private UserRepository userRepository;
 
-  @Autowired
-  private JWTService jwtService;
-
-  @Autowired
-  AuthenticationManager authnManager;
 
   private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -34,18 +29,4 @@ public class UserService {
     userRepository.save(user);
   }
 
-  public String verify(UserDto userDto) throws AuthenticationException {
-    try {
-    Authentication auth =
-        authnManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                userDto.username(), userDto.password()));
-    if (auth.isAuthenticated()) {
-      return jwtService.generateToken(userDto.username());
-    }
-    }catch(AuthenticationException e) {
-      throw new InvalidArgumentException("Invalid username or password");
-    }
-    return "Fail";
-  }
 }

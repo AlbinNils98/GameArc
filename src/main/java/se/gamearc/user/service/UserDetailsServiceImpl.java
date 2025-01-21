@@ -10,10 +10,13 @@ import se.gamearc.user.entity.UserEntity;
 import se.gamearc.user.repository.UserRepository;
 
 @Service
-public class MyUserDetailService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
+
+  public UserDetailsServiceImpl(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
