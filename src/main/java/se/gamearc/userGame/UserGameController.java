@@ -1,5 +1,6 @@
 package se.gamearc.userGame;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.gamearc.userGame.dto.UserGameUpdateDto;
@@ -20,8 +21,9 @@ public class UserGameController {
     this.userGameService = userGameService;
   }
 
-  @GetMapping("user-games/{userId}")
-  public Set<UserGameDto> getUserGames(@PathVariable Integer userId) {
+  @GetMapping("user-games/")
+  public Set<UserGameDto> getUserGames(HttpSession session) {
+    Integer userId = (Integer) session.getAttribute("userId");
     return userGameService.getAllUserGames(userId);
   }
 
