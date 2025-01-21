@@ -1,20 +1,19 @@
 package se.gamearc.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import se.gamearc.user.entity.UserEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.bind.annotation.*;
 import se.gamearc.user.service.UserService;
 
-@RequestMapping("/api")
+
 @RestController
 public class UserController {
 
-  @Autowired
-  private UserService userService;
+  private final UserService userService;
+
+  public UserController(UserService userService, AuthenticationManager authenticationManager) {
+    this.userService = userService;
+  }
 
   @PostMapping("/register")
   public ResponseEntity<String> register(@RequestBody UserDto user) throws Exception {
@@ -22,8 +21,4 @@ public class UserController {
    return ResponseEntity.ok("User created successfully");
   }
 
-  @PostMapping("/login")
-  public String login(@RequestBody UserDto user) throws Exception {
-    return userService.verify(user);
-  }
 }
