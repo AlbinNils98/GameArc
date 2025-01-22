@@ -24,6 +24,7 @@ public class UserGameController {
   @GetMapping("user-games/")
   public Set<UserGameDto> getUserGames(HttpSession session) {
     Integer userId = (Integer) session.getAttribute("userId");
+    System.out.println(userId);
     return userGameService.getAllUserGames(userId);
   }
 
