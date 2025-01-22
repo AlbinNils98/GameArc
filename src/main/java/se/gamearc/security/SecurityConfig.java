@@ -1,6 +1,7 @@
 package se.gamearc.security;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,13 +16,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import se.gamearc.user.service.UserDetailsServiceImpl;
 
 import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+  @Value("${frontend.url}")
+  private String frontendUrl;
 
   UserDetailsServiceImpl userDetailsService;
   AuthSuccessHandlerImpl authSuccessHandler;
@@ -36,14 +37,18 @@ public class SecurityConfig {
     return http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers(POST,"/api/register")
+            .requestMatchers("/register", "/css/**", "/js/**", "/resources/**")
             .permitAll()
             .requestMatchers(GET, "/api/games/**")
             .permitAll()
             .anyRequest().authenticated())
-        .formLogin(withDefaults())
         .formLogin(formLogin -> formLogin
-            .successHandler(authSuccessHandler))
+            .loginPage("/login")
+                .permitAll()
+            .successHandler(authSuccessHandler)
+            )
+        .logout(logout -> logout
+            .logoutSuccessUrl(frontendUrl))
         .build();
   }
 
