@@ -1,9 +1,7 @@
-import Header from "../components/header.tsx";
 
-export default function Library(){
+export default function Archive(){
     return(
         <>
-        <Header/>
             <h2>
                 Library page
             </h2>

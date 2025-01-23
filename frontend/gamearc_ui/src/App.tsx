@@ -1,12 +1,17 @@
 
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
 
-import ProtectedRoute from "./components/ProtectedRoute.tsx";
-import Library from "./pages/Library.tsx";
+import Archive from "./pages/Archive.tsx";
 import Discover from "./pages/Discover.tsx";
 import Home from "./pages/Home.tsx";
+import Header from './components/Header.tsx';
+import RedirectToLogin from './components/RedirectLogin.tsx';
+import { IUser } from './interfaces/interfaces.ts';
+import { useState } from 'react';
 
-const isAuthenticated = false;
+function App() {
+
+const [user, setUser] = useState<IUser | null>();
 
 const router = createBrowserRouter([
   {
@@ -22,17 +27,21 @@ const router = createBrowserRouter([
     element: <Discover/>
   },
   {
-    path: '/library',
-    element:
-        <ProtectedRoute isAuthenticated={isAuthenticated}>
-          <Library/>
-        </ProtectedRoute>
+    path: '/archive',
+    element: user === undefined ? <div>Checking credentials...</div> : user ? <Archive /> : <RedirectToLogin />,
   }
 ])
 
-function App() {
-
-  return <RouterProvider router={router}/>
+  return(
+    <>
+    <Header user={user} setParentUseState={setUser}/>
+    <main className='flex-1 flex flex-col'>
+    <div className='flex-1 self-center flex max-w-7xl flex-col'>
+    <RouterProvider router={router}/>
+    </div>
+    </main>
+    </>
+  ) 
 }
 
 export default App
