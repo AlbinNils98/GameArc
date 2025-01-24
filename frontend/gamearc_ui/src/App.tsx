@@ -58,7 +58,7 @@ const router = createBrowserRouter([
     <>
     <Header user={user} setParentUseState={setUser}/>
     <main className='flex-1 flex flex-col'>
-    <div className='flex-1 self-center flex max-w-7xl flex-col'>
+    <div className='flex-1 self-center flex w-screen max-w-7xl flex-col'>
     <RouterProvider router={router}/>
     </div>
     </main>
