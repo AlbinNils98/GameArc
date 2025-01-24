@@ -8,3 +8,13 @@ export interface IGame {
   cover: string,
   genres: string[]
 }
+
+export interface IUserGame {
+  id: number,
+  game: IGame,
+  comment: string | null,
+  status: string,
+  storyRating: number,
+  graphicsRating: number,
+  gameplayRating: number,
+}
