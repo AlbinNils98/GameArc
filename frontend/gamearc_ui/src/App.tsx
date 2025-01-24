@@ -1,5 +1,5 @@
 
-import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 
 import Archive from "./pages/Archive.tsx";
 import Discover from "./pages/Discover.tsx";
@@ -7,11 +7,33 @@ import Home from "./pages/Home.tsx";
 import Header from './components/Header.tsx';
 import RedirectToLogin from './components/RedirectLogin.tsx';
 import { IUser } from './interfaces/interfaces.ts';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
 
-const [user, setUser] = useState<IUser | null>();
+const [user, setUser] = useState<IUser | null>(null);
+const [loading, setLoading] = useState<boolean>(true);
+
+useEffect(() => {
+  const fetchUserInfo = async () => {
+    try {
+      const response = await axios.get<IUser>('http://localhost:8080/user-info', { withCredentials: true });
+      setUser(response.data);
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        setUser(null);
+        console.log('User is not authenticated.');
+      } else {
+        console.error('An unexpected error occurred:', error);
+      }
+    } finally {
+      setLoading(false); // Set loading to false once the request is done
+    }
+  };
+
+  fetchUserInfo();
+}, []);
 
 const router = createBrowserRouter([
   {
@@ -24,11 +46,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/discover',
-    element: <Discover/>
+    element: <Discover user={user} />
   },
   {
     path: '/archive',
-    element: user === undefined ? <div>Checking credentials...</div> : user ? <Archive /> : <RedirectToLogin />,
+    element: loading ? <div>Loading...</div> : user === null ? <RedirectToLogin /> : <Archive />,
   }
 ])
 

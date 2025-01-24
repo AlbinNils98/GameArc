@@ -1,10 +1,14 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { IGame } from '../interfaces/interfaces';
-import { data } from 'react-router-dom';
 import GameList from '../components/GameList';
+import { IUser } from '../interfaces/interfaces';
 
-export default function Discover() {
+interface props {
+  user: IUser | null;
+}
+
+export default function Discover( { user } : props) {
   const [games, setGames] = useState<IGame[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [offset, setOffset] = useState<number>(0);
@@ -62,7 +66,7 @@ export default function Discover() {
         placeholder='Search for game...'
       />
       </div>
-          <GameList games={games} />
+          <GameList games={games} user={user} />
           {isNextGames && <button onClick={handleShowMore} className='bg-gaBlue text-gaWhite w-36 self-center pt-1 pb-1 pl-3 pr-3 rounded-md mb-5 active:opacity-80' >Show more</button>}
     </>
   );

@@ -1,13 +1,14 @@
 import alterSize from '../utils/alterSize';
-import { IGame } from '../interfaces/interfaces';
+import { IGame, IUser } from '../interfaces/interfaces';
 import { useState } from 'react';
 import GameModal from './GameModal';
 
 interface headerProps {
   games: IGame[];
+  user: IUser | null;
 }
 
-export default function GameList({ games }: headerProps) {
+export default function GameList({ games, user }: headerProps) {
 
   const [selectedGame, setSelectedGame] = useState<IGame | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,7 +38,7 @@ export default function GameList({ games }: headerProps) {
   <></>}
   </ul>
   {selectedGame && (
-    <GameModal game={selectedGame} isOpen={isModalOpen} onClose={closeModal} />
+    <GameModal game={selectedGame} isOpen={isModalOpen} onClose={closeModal} user={user}/>
   )}
   </div>
 );
