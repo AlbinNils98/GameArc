@@ -102,7 +102,7 @@ Once both the backend and frontend are running:
 
 - **Backend**: Spring Boot (Maven-based)
 - **Frontend**: React (Vite-powered)
-- **Database**: (Specify your database, e.g., MySQL, PostgreSQL, H2, etc.)
+- **Database**: (MySQL)
 - **APIs Used**: IGDB API for fetching game data
 
 ---
