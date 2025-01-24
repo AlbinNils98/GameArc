@@ -51,7 +51,7 @@ public class UserGameController {
     Integer userId = (Integer) session.getAttribute("userId");
     UserGame game = userGameService.saveUserGame(userId, userIGDBGameDto);
     String encodedTitle = game.getGame().getTitle().replace(" ", "%20");
-    String location = "/api/user-games/%d/%s".formatted(userId, encodedTitle);
+    String location = "/api/user-games/%s/%s".formatted("title", encodedTitle);
     return ResponseEntity.created(URI.create(location)).build();
   }
 

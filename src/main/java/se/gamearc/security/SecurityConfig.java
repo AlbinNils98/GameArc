@@ -1,6 +1,7 @@
 package se.gamearc.security;
 
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
+        .cors().and()
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/register", "/css/**", "/js/**", "/resources/**")
@@ -49,6 +51,10 @@ public class SecurityConfig {
             )
         .logout(logout -> logout
             .logoutSuccessUrl(frontendUrl))
+        .exceptionHandling(exceptionHandle -> exceptionHandle
+            .authenticationEntryPoint((request, response, authException) -> {
+              response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            }))
         .build();
   }
 
