@@ -18,7 +18,8 @@ Before starting the application, ensure you have the following:
 
 1. **Java 23** (for the Spring Boot backend).
 2. **Node.js** and **npm** (for the React frontend, developed with Vite).
-3. **Twitch Client-ID** and **IGDB Access-Key** set as environment variables:
+3. **Docker** installed on your computer (for running the Docker Compose script for initializing the MySQL database).
+5. **Twitch Client-ID** and **IGDB Access-Key** set as environment variables:
    - `IGDB_CLIENT_ID`
    - `IGDB_KEY`
    - See [IGDB API Docs](https://api-docs.igdb.com/#getting-started) for details on obtaining these keys.
