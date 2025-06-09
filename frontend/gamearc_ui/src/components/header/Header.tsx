@@ -10,15 +10,15 @@ interface headerProps {
 
 export default function Header({ user }: headerProps) {
   const login = () => {
-    window.location.href = 'http://localhost:8080/login';
+    window.location.href = `${import.meta.env.VITE_API_URL}/login`;
   };
 
   const logout = () => {
-    window.location.href = 'http://localhost:8080/logout';
+    window.location.href = `${import.meta.env.VITE_API_URL}/logout`;
   };
 
   const register = () => {
-    window.location.href = 'http://localhost:8080/register';
+    window.location.href = `${import.meta.env.VITE_API_URL}/register`;
   };
 
   return (
