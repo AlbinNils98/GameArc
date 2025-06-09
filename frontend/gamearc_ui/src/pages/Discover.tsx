@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { IGame } from '../interfaces/interfaces';
 import GameList from '../components/GameList';
 import { IUser } from '../interfaces/interfaces';
+import api from '../api/axios';
 
 interface props {
   user: IUser | null;
@@ -28,8 +28,8 @@ export default function Discover( { user } : props) {
   }, [inputValue]);
 
   const getGames = (gameTitle: string, currentOffset: number, isNewSearch: boolean = false) => {
-    axios
-      .get(`http://localhost:8080/api/games/name/${gameTitle}?limit=10&offset=${currentOffset}`)
+    api
+      .get(`/games/name/${gameTitle}?limit=10&offset=${currentOffset}`)
       .then((response) => {
         if (Array.isArray(response.data) && response.data.length > 0) {
           if (isNewSearch) {

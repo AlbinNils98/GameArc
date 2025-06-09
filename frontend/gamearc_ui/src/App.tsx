@@ -4,11 +4,11 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import Archive from "./pages/Archive.tsx";
 import Discover from "./pages/Discover.tsx";
 import Home from "./pages/Home.tsx";
-import Header from './components/Header.tsx';
 import RedirectToLogin from './components/RedirectLogin.tsx';
 import { IUser } from './interfaces/interfaces.ts';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Header from './components/header/Header.tsx';
 
 function App() {
 
@@ -28,7 +28,7 @@ useEffect(() => {
         console.error('An unexpected error occurred:', error);
       }
     } finally {
-      setLoading(false); // Set loading to false once the request is done
+      setLoading(false);
     }
   };
 

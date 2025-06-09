@@ -1,8 +1,7 @@
 import alterSize from '../utils/alterSize';
 import { IGame, IUser } from '../interfaces/interfaces';
 import { useEffect, useState } from 'react';
-import RedirectToLogin from './RedirectLogin';
-import AddToLibraryModal from './addToLibraryModal';
+import AddToLibraryModal from './AddToLibraryModal';
 
 interface ModalProps {
   game: IGame;
