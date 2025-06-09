@@ -29,7 +29,7 @@ export default function Discover( { user } : props) {
 
   const getGames = (gameTitle: string, currentOffset: number, isNewSearch: boolean = false) => {
     api
-      .get(`/games/name/${gameTitle}?limit=10&offset=${currentOffset}`)
+      .get(`/api/games/name/${gameTitle}?limit=10&offset=${currentOffset}`)
       .then((response) => {
         if (Array.isArray(response.data) && response.data.length > 0) {
           if (isNewSearch) {
