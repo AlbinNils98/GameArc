@@ -35,7 +35,7 @@ const AddToLibraryModal = ({ game, isOpen, onClose }: props) => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/user-games/',
+        '/api/user-games/',
         formValues,
         { withCredentials: true }
       );

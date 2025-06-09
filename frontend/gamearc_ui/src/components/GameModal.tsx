@@ -29,7 +29,7 @@ const GameModal: React.FC<ModalProps> = ({ game, isOpen, onClose, user }) => {
 
   const handleClick = () => {
     if (user === null) {
-      window.location.href = 'http://localhost:8080/login'
+      window.location.href = `${import.meta.env.VITE_API_URL}/login`
     } else {
       setIsAddOpen(true);
     }
