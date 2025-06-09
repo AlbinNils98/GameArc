@@ -18,7 +18,8 @@ Before starting the application, ensure you have the following:
 
 1. **Java 23** (for the Spring Boot backend).
 2. **Node.js** and **npm** (for the React frontend, developed with Vite).
-3. **Twitch Client-ID** and **IGDB Access-Key** set as environment variables:
+3. **Docker** installed on your computer (for running the Docker Compose script that initializes the MySQL database).
+5. **Twitch Client-ID** and **IGDB Access-Key** set as environment variables:
    - `IGDB_CLIENT_ID`
    - `IGDB_KEY`
    - See [IGDB API Docs](https://api-docs.igdb.com/#getting-started) for details on obtaining these keys.
@@ -29,7 +30,7 @@ Before starting the application, ensure you have the following:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/gamearc.git  
+git clone https://github.com/AlbinNils98/GameArc  
 cd gamearc  
 ```
 ---
@@ -102,7 +103,7 @@ Once both the backend and frontend are running:
 
 - **Backend**: Spring Boot (Maven-based)
 - **Frontend**: React (Vite-powered)
-- **Database**: (Specify your database, e.g., MySQL, PostgreSQL, H2, etc.)
+- **Database**: (MySQL)
 - **APIs Used**: IGDB API for fetching game data
 
 ---
