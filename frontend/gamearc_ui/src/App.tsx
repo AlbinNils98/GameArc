@@ -18,7 +18,7 @@ const [loading, setLoading] = useState<boolean>(true);
 useEffect(() => {
   const fetchUserInfo = async () => {
     try {
-      const response = await axios.get<IUser>('/api/user-info', { withCredentials: true });
+      const response = await axios.get<IUser>('/user-info', { withCredentials: true });
       setUser(response.data);
     } catch (error: any) {
       if (error.response?.status === 401) {
