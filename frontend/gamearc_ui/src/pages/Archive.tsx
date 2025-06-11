@@ -1,7 +1,8 @@
-import axios, { isAxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { IUserGame } from '../interfaces/interfaces';
 import UserGamesList from '../components/UserGamesList';
+import api from '../api/axios';
 
 export default function Archive() {
   const [isUserGames, setIsUserGames] = useState<boolean>(false);
@@ -13,7 +14,7 @@ export default function Archive() {
 
   const fetchUserGames = async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         '/api/user-games/',
         { withCredentials: true }
       );

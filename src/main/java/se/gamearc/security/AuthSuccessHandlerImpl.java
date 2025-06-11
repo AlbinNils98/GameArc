@@ -14,14 +14,11 @@ import java.io.IOException;
 @Component
 public class AuthSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
-  @Value("${frontend.url}")
-  private String frontendUrl;
-
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     UserPrincipal authResult = (UserPrincipal) authentication.getPrincipal();
     request.getSession().setAttribute("userId", authResult.getId());
 
-    response.sendRedirect(frontendUrl);
+    response.setStatus(HttpServletResponse.SC_OK);
   }
 }

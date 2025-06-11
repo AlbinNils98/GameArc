@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -45,12 +46,16 @@ public class SecurityConfig {
             .permitAll()
             .anyRequest().authenticated())
         .formLogin(formLogin -> formLogin
-            .loginPage("/login")
-                .permitAll()
+                .loginProcessingUrl("/login")
             .successHandler(authSuccessHandler)
             )
         .logout(logout -> logout
-            .logoutSuccessUrl(frontendUrl))
+            .logoutUrl("/logout")
+            .logoutSuccessHandler((request, response, authentication) -> {
+              response.setStatus(HttpStatus.OK.value());
+            })
+            .deleteCookies("JSESSIONID")
+        )
         .exceptionHandling(exceptionHandle -> exceptionHandle
             .authenticationEntryPoint((request, response, authException) -> {
               response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");

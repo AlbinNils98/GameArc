@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
 import { IGame } from '../interfaces/interfaces';
 import GameList from '../components/GameList';
-import { IUser } from '../interfaces/interfaces';
 import api from '../api/axios';
+import { useAuth } from '../contexts/Auth';
 
-interface props {
-  user: IUser | null;
-}
-
-export default function Discover( { user } : props) {
+export default function Discover() {
+  const {user} = useAuth();
   const [games, setGames] = useState<IGame[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [offset, setOffset] = useState<number>(0);

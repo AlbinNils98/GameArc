@@ -2,6 +2,7 @@ import alterSize from '../utils/alterSize';
 import { IGame, IUser } from '../interfaces/interfaces';
 import { useEffect, useState } from 'react';
 import AddToLibraryModal from './AddToLibraryModal';
+import { useNavigate } from 'react-router-dom';
 
 interface ModalProps {
   game: IGame;
@@ -12,6 +13,8 @@ interface ModalProps {
 
 const GameModal: React.FC<ModalProps> = ({ game, isOpen, onClose, user }) => {
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isOpen) {
@@ -28,8 +31,8 @@ const GameModal: React.FC<ModalProps> = ({ game, isOpen, onClose, user }) => {
   if (!isOpen) return null;
 
   const handleClick = () => {
-    if (user === null) {
-      window.location.href = `${import.meta.env.VITE_API_URL}/login`
+    if (!user) {
+      navigate('/login');
     } else {
       setIsAddOpen(true);
     }
