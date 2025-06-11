@@ -20,7 +20,7 @@ const UserGameModal = ({ userGame, handleClose }: props) => {
             <img
               src={alterSize(userGame.game.cover)}
               alt={userGame.game.title}
-              className='max-h-64 rounded-sm object-cover'
+              className='max-h-64 rounded-md object-cover'
             />
             <p className='font-semibold sm:ml-5 max-w-96'>{userGame.game.description}</p>
           </div>
@@ -37,7 +37,7 @@ const UserGameModal = ({ userGame, handleClose }: props) => {
           <div className='flex justify-between mt-4'>
             <button
               onClick={handleClose}
-              className='bg-blue-500 text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100'
+              className='text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100'
             >
               Go back
             </button>
@@ -55,7 +55,7 @@ const UserGameModal = ({ userGame, handleClose }: props) => {
           <p className='text-gaBlue font-semibold'>Gameplay rating: {userGame.gameplayRating}/10</p>
           <p className='text-gaBlue font-semibold mt-2'>Average rating: {getAverageRating(userGame)}/10</p>
           </div>
-          <button className='bg-blue-500 text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100 self-end justify-self-end'>Edit</button>
+          <button className='text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100 self-end justify-self-end'>Edit</button>
         </div>
       </div>
   );

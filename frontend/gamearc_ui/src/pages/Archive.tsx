@@ -26,7 +26,6 @@ export default function Archive() {
     } catch (error: unknown) {
       if (isAxiosError(error) && error.response?.status === 404) {
         setIsUserGames(false);
-        console.log('No games found');
       }
     }
   };

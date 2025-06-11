@@ -13,24 +13,24 @@ import Register from './pages/Register.tsx';
 function App() {
 
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Routes>
           <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path='/home' element={<Home />} />
-          <Route path='/discover' element={<Discover />} />
-          <Route path='/archive' element={
-            <ProtectedRoute>
-              <Archive />
-            </ProtectedRoute>
-          }/>
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
+            <Route index element={<Home />} />
+            <Route path='/home' element={<Home />} />
+            <Route path='/discover' element={<Discover />} />
+            <Route path='/archive' element={
+              <ProtectedRoute>
+                <Archive />
+              </ProtectedRoute>
+            } />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
           </Route>
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 

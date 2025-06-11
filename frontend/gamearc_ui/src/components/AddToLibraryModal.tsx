@@ -1,7 +1,8 @@
-import axios, { isAxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { IGame } from '../interfaces/interfaces';
 import alterSize from '../utils/alterSize';
 import { useState } from 'react';
+import api from '../api/axios';
 
 interface props {
   game: IGame;
@@ -34,7 +35,7 @@ const AddToLibraryModal = ({ game, isOpen, onClose }: props) => {
     };
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
         '/api/user-games/',
         formValues,
         { withCredentials: true }
@@ -53,7 +54,7 @@ const AddToLibraryModal = ({ game, isOpen, onClose }: props) => {
   };
 
   const ratingOptions = () => {
-    let options: number[] = [];
+    const options: number[] = [];
 
     for (let i = 1; i <= 10; i++) {
       options.push(i);
@@ -165,14 +166,14 @@ const AddToLibraryModal = ({ game, isOpen, onClose }: props) => {
                     </label>
                   </div>
                   {isAdded && (
-                    <p className='bg-blue-500 text-gaWhite rounded-md px-5 py-1 bg-gaBlue cursor-default'>
+                    <p className='text-gaWhite rounded-md px-5 py-1 bg-gaBlue cursor-default'>
                       {responseText}
                     </p>
                   )}
                   {!isAdded && (
                     <button
                       type='submit'
-                      className='bg-blue-500 text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100'
+                      className='text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100'
                     >
                       Add to library
                     </button>
@@ -182,7 +183,7 @@ const AddToLibraryModal = ({ game, isOpen, onClose }: props) => {
             </div>
             <button
               onClick={onClose}
-              className='bg-blue-500 text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100 mt-5 self-start'
+              className='text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100 mt-5 self-start'
             >
               Go back
             </button>

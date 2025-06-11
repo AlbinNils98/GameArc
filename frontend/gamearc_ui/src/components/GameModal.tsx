@@ -69,12 +69,12 @@ const GameModal: React.FC<ModalProps> = ({ game, isOpen, onClose, user }) => {
             <div className='flex justify-between mt-4'>
               <button
                 onClick={onClose}
-                className='bg-blue-500 text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100'
+                className='text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100'
               >
                 Close
               </button>
               <button
-                className='bg-blue-500 text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100'
+                className='text-gaWhite rounded-md px-5 py-1 bg-gaBlue hover:opacity-80 active:opacity-100'
                 onClick={handleClick}
               >
                 Add to library

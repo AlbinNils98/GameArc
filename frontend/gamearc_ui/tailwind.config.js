@@ -7,11 +7,12 @@ export default {
     "./*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    colors: {
-      'gaBlue': '#49485C',
-      'gaWhite': '#D9D9D9',
+    extend: {
+      colors: {
+        'gaBlue': '#49485C',
+        'gaWhite': '#D9D9D9',
+      },
     },
-    extend: {},
   },
   plugins: [],
 }
