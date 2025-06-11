@@ -13,6 +13,7 @@ export default function Login() {
     const signIn = async (e: FormEvent) => {
         e.preventDefault();
 
+        console.log(import.meta.env.VITE_API_URL);
         try {
             const res = await api.post('/login',
                 new URLSearchParams({ username, password }),
