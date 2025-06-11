@@ -3,10 +3,10 @@ package se.gamearc.security;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Collection;
 
 @Component
 public class SameSiteCookieFilter implements Filter {
@@ -15,25 +15,30 @@ public class SameSiteCookieFilter implements Filter {
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
 
-    chain.doFilter(request, response); // Proceed with the request
-
-    if (response instanceof HttpServletResponse res && request instanceof HttpServletRequest req) {
-      Collection<String> headers = res.getHeaders("Set-Cookie");
-
-      boolean first = true;
-      for (String header : headers) {
-        if (header.contains("JSESSIONID") && !header.contains("SameSite")) {
-          String updatedHeader = updateSameSite(header, req);
-
-          if (first) {
-            res.setHeader("Set-Cookie", updatedHeader);
-            first = false;
-          } else {
-            res.addHeader("Set-Cookie", updatedHeader);
-          }
-        }
-      }
+    if (!(response instanceof HttpServletResponse res) || !(request instanceof HttpServletRequest req)) {
+      chain.doFilter(request, response);
+      return;
     }
+
+    HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(res) {
+      @Override
+      public void addHeader(String name, String value) {
+        if ("Set-Cookie".equalsIgnoreCase(name) && value.contains("JSESSIONID") && !value.contains("SameSite")) {
+          value = updateSameSite(value, req);
+        }
+        super.addHeader(name, value);
+      }
+
+      @Override
+      public void setHeader(String name, String value) {
+        if ("Set-Cookie".equalsIgnoreCase(name) && value.contains("JSESSIONID") && !value.contains("SameSite")) {
+          value = updateSameSite(value, req);
+        }
+        super.setHeader(name, value);
+      }
+    };
+
+    chain.doFilter(req, responseWrapper);
   }
 
   private String updateSameSite(String header, HttpServletRequest request) {
@@ -41,7 +46,7 @@ public class SameSiteCookieFilter implements Filter {
         || request.getServerName().startsWith("127.");
 
     return isDev
-        ? header + "; SameSite=None"                  // dev: don't require Secure
-        : header + "; SameSite=None; Secure";         // prod: require Secure
+        ? header + "; SameSite=None"
+        : header + "; SameSite=None; Secure";
   }
 }
