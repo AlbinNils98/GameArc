@@ -12,10 +12,12 @@ import se.gamearc.userGame.api.Ratings;
 import se.gamearc.userGame.dto.UserGameUpdateDto;
 import se.gamearc.userGame.dto.UserIGDBGameDto;
 import se.gamearc.userGame.dto.UserGameDto;
+import se.gamearc.userGame.entity.Status;
 import se.gamearc.userGame.entity.UserGame;
 import se.gamearc.userGame.repository.StatusRepository;
 import se.gamearc.userGame.repository.UserGameRepository;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -126,5 +128,9 @@ public class UserGameService {
     userGame.setComment(userGame.getComment());
 
     userGameRepository.save(userGame);
+  }
+
+  public Set<Status> getStatuses() {
+    return statusRepository.findAll().stream().collect(Collectors.toSet());
   }
 }

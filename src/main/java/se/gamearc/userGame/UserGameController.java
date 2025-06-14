@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import se.gamearc.userGame.dto.UserGameUpdateDto;
 import se.gamearc.userGame.dto.UserIGDBGameDto;
 import se.gamearc.userGame.dto.UserGameDto;
+import se.gamearc.userGame.entity.Status;
 import se.gamearc.userGame.entity.UserGame;
 
 import java.net.URI;
@@ -44,6 +45,11 @@ public class UserGameController {
   public Set<UserGameDto> getUserGamesByStatus(HttpSession session, @PathVariable String status) {
     Integer userId = (Integer) session.getAttribute("userId");
     return userGameService.getUserGamesByStatus(userId, status);
+  }
+
+  @GetMapping("statuses/")
+  public Set<Status> getStatuses() {
+    return userGameService.getStatuses();
   }
 
   @PostMapping("user-games/")

@@ -1,22 +1,22 @@
 
-SET FOREIGN_KEY_CHECKS = 0;
+# SET FOREIGN_KEY_CHECKS = 0;
 
-TRUNCATE TABLE genre;
-TRUNCATE TABLE game;
-TRUNCATE TABLE users;
-TRUNCATE TABLE user_game;
-TRUNCATE TABLE status;
-TRUNCATE TABLE game_genre;
+# TRUNCATE TABLE genre;
+# TRUNCATE TABLE game;
+# TRUNCATE TABLE users;
+# TRUNCATE TABLE user_game;
+# TRUNCATE TABLE status;
+# TRUNCATE TABLE game_genre;
 
-SET FOREIGN_KEY_CHECKS = 1;
+# SET FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO status (name)
-VALUES ('playing'),
-       ('owned'),
-       ('wishlist'),
-       ('completed'),
-       ('abandoned'),
-       ('on hold');
+# INSERT INTO status (name)
+# VALUES ('playing'),
+#       ('owned'),
+#       ('wishlist'),
+#       ('completed'),
+#       ('abandoned'),
+#       ('on hold');
 # INSERT INTO genre (name)
 # VALUES ('RPG'),
 #        ('Shooter'),
